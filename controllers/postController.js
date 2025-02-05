@@ -4,7 +4,14 @@ const connection = require('../data/db');
 
 
 const index = (req, res) => {
-    res.send('Server dei posts');
+
+    const sql = 'SELECT * FROM POSTS';  //PREPARAZIONE QUERY
+
+    // inizializzo la query
+    connection.query(sql, (err, results) => {
+        if (err) return res.status(500).json({ error: 'Query al db non corretta' })
+        res.json(results)
+    })
 }
 
 const show = (req, res) => {
