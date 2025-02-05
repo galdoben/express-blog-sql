@@ -1,6 +1,7 @@
 
 // connessione db
 const connection = require('../data/db');
+const { post } = require('../routers/posts');
 
 
 const index = (req, res) => {
@@ -10,15 +11,17 @@ const index = (req, res) => {
     // inizializzo la query
     connection.query(sql, (err, results) => {
         if (err) return res.status(500).json({ error: 'Query al db non corretta' })
-        res.json(results)
-    })
-}
+        res.json(results);
+    });
+};
 
 const show = (req, res) => {
 
     const id = req.params.id
 
     const sql = 'SELECT * FROM POSTS WHERE id=?';
+    // const sqlTags = 'SELECT T.* FROM tags T JOIN post_tag ON tags.id = post_tag.post_id WHERE post_tag.tag_id = ?';    --BONUS--
+
 
     connection.query(sql, [id], (err, results) => {
         if (err) return res.status(500).json({ error: 'Query al db non corretta' });
@@ -26,8 +29,16 @@ const show = (req, res) => {
         console.log(results);
         const post = results[0];
 
-        res.json(post);
-    })
+
+        // // query tags -- BONUS --
+        // connection.query(sqlTags, [id], (err, tagsResults) => {
+        //     if (err) return res.status(500).json({ error: 'Query al db non riuscita' });
+        //     post.tags = tagsResults
+        //     res.json(post);
+        // });
+
+
+    });
 }
 
 const store = (req, res) => {
