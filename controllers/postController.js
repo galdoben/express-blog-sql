@@ -45,7 +45,13 @@ const modify = (req, res) => {
 }
 const destroy = (req, res) => {
     const id = req.params.id
-    res.send(`Elimina posts ${id}`);
+
+    const sql = 'DELETE FROM POSTS WHERE id=?';
+
+    connection.query(sql, [id], (err) => {
+        if (err) return res.status(500).json({ error: 'Eliminazione non riuscita' });
+        res.sendStatus(204)
+    })
 }
 
 
